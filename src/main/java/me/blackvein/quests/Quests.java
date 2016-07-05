@@ -2115,9 +2115,9 @@ try{
                             String msg = Lang.get("questAlreadyCompleted");
                             msg = msg.replaceAll("<quest>", PURPLE + q.name + YELLOW);
                             player.sendMessage(YELLOW + msg);
-                        } else if (q.npcStart != null && allowCommandsForNpcQuests == false) {
+                        } else if (q.npcStart != null && !q.npcStart.isEmpty() && allowCommandsForNpcQuests == false) {
                             String msg = Lang.get("mustSpeakTo");
-                            msg = msg.replaceAll("<npc>", PURPLE + q.npcStart.getName() + YELLOW);
+                            msg = msg.replaceAll("<npc>", PURPLE + q.npcStart.get(0).getName() + YELLOW);
                             player.sendMessage(YELLOW + msg);
                         } else if (q.blockStart != null) {
                             String msg = Lang.get("noCommandStart");
@@ -2338,9 +2338,9 @@ try{
                     }
 
                 }
-                if (q.npcStart != null) {
+                if (q.npcStart != null && !q.npcStart.isEmpty()) {
                     String msg = Lang.get("speakTo");
-                    msg = msg.replaceAll("<npc>", q.npcStart.getName());
+                    msg = msg.replaceAll("<npc>", q.npcStart.get(0).getName());
                     cs.sendMessage(YELLOW + msg);
                 } else {
                     cs.sendMessage(YELLOW + q.description);
@@ -2810,14 +2810,19 @@ try{
                 }
 
                 if (citizens != null && config.contains("quests." + questName + ".npc-giver-id")) {
-                    if (CitizensAPI.getNPCRegistry().getById(config.getInt("quests." + questName + ".npc-giver-id")) != null) {
+                	List<Integer> npcids = getConfig().getIntegerList("quests." + questName + ".npc-giver-id");
+                	quest.npcStart.clear();
+                    for (Integer id : npcids) {
+                        if (CitizensAPI.getNPCRegistry().getById(id) != null) {
 
-                        quest.npcStart = CitizensAPI.getNPCRegistry().getById(config.getInt("quests." + questName + ".npc-giver-id"));
-                        questNPCs.add(CitizensAPI.getNPCRegistry().getById(config.getInt("quests." + questName + ".npc-giver-id")));
+                            quest.npcStart.put(id, CitizensAPI.getNPCRegistry().getById(id));
+                            questNPCs.add(CitizensAPI.getNPCRegistry().getById(config.getInt("quests." + questName + ".npc-giver-id")));
 
-                    } else {
-                        skipQuestProcess("npc-giver-id: for Quest " + quest.name + " is not a valid NPC id!");
-                    }
+                        } else {
+                            skipQuestProcess("npc-giver-id: for Quest " + quest.name + " is not a valid NPC id!");
+                        }
+                	}
+
                 }
 
                 if (config.contains("quests." + questName + ".block-start")) {
@@ -4484,7 +4489,8 @@ try{
         String parsed = s;
 
         if (parsed.contains("<npc>")) {
-            parsed = parsed.replaceAll("<npc>", quest.npcStart.getName());
+        	if (quest.npcStart != null && !quest.npcStart.isEmpty())
+        	    parsed = parsed.replaceAll("<npc>", quest.npcStart.get(0).getName());
         }
 
         parsed = parsed.replaceAll("<black>", BLACK.toString());
@@ -5306,7 +5312,7 @@ try{
 
             if (q.npcStart != null && quester.completedQuests.contains(q.name) == false) {
 
-                if (q.npcStart.getId() == npc.getId()) {
+                if (q.npcStart.containsKey(npc.getId())) {
 
                     if(ignoreLockedQuests == false || ignoreLockedQuests == true && q.testRequirements(quester) == true) {
                         return true;

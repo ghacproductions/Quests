@@ -36,7 +36,7 @@ public class Quest {
     public ItemStack guiDisplay = null;
     public int parties = 0;
     LinkedList<Stage> orderedStages = new LinkedList<Stage>();
-    NPC npcStart;
+    HashMap<Integer, NPC> npcStart;
     Location blockStart;
     Quests plugin;
     Event initialEvent;

@@ -1752,8 +1752,8 @@ public class QuestFactory implements ConversationAbandonedListener, ColorUtil {
 
         cc.setSessionData(CK.ED_QUEST_EDIT, q.name);
         cc.setSessionData(CK.Q_NAME, q.name);
-        if (q.npcStart != null) {
-            cc.setSessionData(CK.Q_START_NPC, q.npcStart.getId());
+        if (q.npcStart != null && !q.npcStart.isEmpty()) {
+            cc.setSessionData(CK.Q_START_NPC, q.npcStart.get(0).getId());
         }
         cc.setSessionData(CK.Q_START_BLOCK, q.blockStart);
         if (q.redoDelay != -1) {

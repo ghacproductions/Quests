@@ -138,7 +138,7 @@ public class NpcListener implements Listener {
                         for (Quest q : plugin.getQuests()) {
                             if(quester.currentQuests.containsKey(q))
                                 continue;
-                            if (q.npcStart != null && q.npcStart.getId() == evt.getNPC().getId()) {
+                            if (q.npcStart != null && q.npcStart.containsKey(evt.getNPC().getId())) {
                                 if (Quests.ignoreLockedQuests && (quester.completedQuests.contains(q.name) == false || q.redoDelay > -1)) {
                                     if (q.testRequirements(quester)) {
                                         npcQuests.add(q);
