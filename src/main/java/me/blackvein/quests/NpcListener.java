@@ -132,7 +132,6 @@ public class NpcListener implements Listener {
                     }
 
                     if (!hasObjective) {
-
                         LinkedList<Quest> npcQuests = new LinkedList<Quest>();
 
                         for (Quest q : plugin.getQuests()) {

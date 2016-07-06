@@ -2810,13 +2810,12 @@ try{
                 }
 
                 if (citizens != null && config.contains("quests." + questName + ".npc-giver-id")) {
-                	List<Integer> npcids = getConfig().getIntegerList("quests." + questName + ".npc-giver-id");
+                	List<Integer> npcids = config.getIntegerList("quests." + questName + ".npc-giver-id");
                 	quest.npcStart.clear();
-                    for (Integer id : npcids) {
+                    for (int id : npcids) {
                         if (CitizensAPI.getNPCRegistry().getById(id) != null) {
-
                             quest.npcStart.put(id, CitizensAPI.getNPCRegistry().getById(id));
-                            questNPCs.add(CitizensAPI.getNPCRegistry().getById(config.getInt("quests." + questName + ".npc-giver-id")));
+                            questNPCs.add(CitizensAPI.getNPCRegistry().getById(id));
 
                         } else {
                             skipQuestProcess("npc-giver-id: for Quest " + quest.name + " is not a valid NPC id!");

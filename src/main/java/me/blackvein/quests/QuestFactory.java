@@ -6,6 +6,7 @@ import me.blackvein.quests.util.ColorUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -1280,7 +1281,7 @@ public class QuestFactory implements ConversationAbandonedListener, ColorUtil {
         }
 
         cs.set("name", name);
-        cs.set("npc-giver-id", npcStart);
+        cs.set("npc-giver-id", (List<Integer>) new ArrayList<Integer>(Quests.getInstance().getQuest(name).npcStart.keySet()));
         cs.set("block-start", blockStart);
         if (redo != null) {
         	cs.set("redo-delay", redo.intValue() / 1000);
